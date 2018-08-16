@@ -18,7 +18,7 @@ public class PathTracer {
 	
 	final static int MAX_REBOTES = 3;
 	public static double profImagen = 10;
-	public static int antialiasing = 5;
+	public static int antialiasing = 30;
 	public static List<Figure> figures = new ArrayList<Figure>();
 	private static Direction Nb;
 	private static Direction Nt;
@@ -26,8 +26,8 @@ public class PathTracer {
 
 	public static void main(String[] args) {
 		// Resolution photo
-		int y = 720;
-		int x = 720;
+		int y = 1080;
+		int x = 1080;
 
 		// Variables Path
 		BufferedImage bI = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
@@ -110,34 +110,14 @@ public class PathTracer {
 	}
 
 	public static Color brighter(Color color, double percent) {
-//		float[] hsb = new float[3];
-//		int r = color.getRed();
-//		int g = color.getGreen();
-//		int b = color.getBlue();
-//		Color.RGBtoHSB(r, g, b, hsb);
-//		hsb[2] *= 3f;
-//		color = Color.getHSBColor(hsb[0], hsb[1], hsb[2]);
 		int red = (int)(color.getRed() + (color.getRed()* percent));
 		if(red>255) red = 255;
 		int green = (int) (color.getGreen() +( color.getGreen()* percent));
 		if(green>255) green = 255;
 		int blue = (int) (color.getBlue() + (color.getBlue()* percent));
 		if(blue>255) blue = 255;
-
-//      int alpha = color.getAlpha();
 		
       return new Color(red, green, blue);
-		// brightness
-
-		
-//		color.getHSBColor(antialiasing, antialiasing, antialiasing);
-//		int red = (int)(color.getRed() + (color.getRed()* percent));
-//        int green = (int) (color.getGreen() +( color.getGreen()* percent));
-//        int blue = (int) (color.getBlue() + (color.getBlue()* percent));
-
-//        int alpha = color.getAlpha();
-
-//        return new Color(red, green, blue);
 	}
 	
 	private static void percent(int py, int y) {
@@ -215,30 +195,17 @@ public class PathTracer {
 				lI = luzIndirectaDifusa(intersection, light, figures, f, tt,0);
 			}
 			// end ray
-//			if (mC == 2|| mC == 1) { //Si es espejo 
-				rA = (ld.getRed() + lI.getRed());
-				bA = (ld.getBlue() + lI.getBlue());
-				gA = (ld.getGreen() + lI.getGreen());	
-//			}
-//			else if(mC == 1) {
-//				rA = ld.getRed() + lI.getRed();
-//				bA = ld.getBlue() + lI.getBlue();
-//				gA = ld.getGreen() + lI.getGreen();
-//				
-//			}else {
-//			if (mC == 2|| mC == 1) {
-//				rA = lI.getRed() + rA;
-//				bA = lI.getBlue() + bA;
-//				gA = lI.getGreen() + gA;
-//
-//			}
-//			else {
-//				rA = ld.getRed();
-//				bA = ld.getBlue();
-//				gA = ld.getGreen();
-//			}
-		}
 
+				rA =rA + (ld.getRed() + lI.getRed())/2;
+				bA =bA + (ld.getBlue() + lI.getBlue())/2;
+				gA = gA + (ld.getGreen() + lI.getGreen())/2;
+				
+				//PARA PROBAR INDIRECTA SOLO DESCOMENTAR
+//			rA =rA + lI.getRed();
+//			bA =bA +  lI.getBlue();
+//			gA = gA +  lI.getGreen();
+		}
+		
 		rA = rA / (antialiasing);
 		bA = bA / (antialiasing);
 		gA = gA / (antialiasing);
@@ -276,7 +243,9 @@ public class PathTracer {
 			Figure fi, Ray ray,  int bounds) {
 		// new ray
 		/******************************/
-		Direction rayDirection = getSample();
+		double cosTheta = Math.random();
+	    double sinTheta = Math.sqrt(1 - cosTheta * cosTheta);
+		Direction rayDirection = getSample(cosTheta);
 		createCoordinateSystem(fi.getNormal(intersect));
 
 		Direction rayDirectionCast = new Direction(rayDirection.getX() * Nb.getX() 
@@ -318,18 +287,29 @@ public class PathTracer {
 //				lD = new Color(((lD2.getRed() + lD.getRed()) / 2), ((lD2.getGreen() + lD.getGreen()) / 2),
 //				((lD2.getBlue() + lD.getBlue()) / 2));
 			}
-			double rr =lD2.getRed()*f.getKd();
-			double bb =lD2.getBlue()*f.getKd();
-			double gg = lD2.getGreen()*f.getKd();
+			double rr =lD2.getRed()*f.getKd()/(bounds+1);//(2*sinTheta*cosTheta);//Operator.subP(intersection, intersect).module();//
+			double bb =lD2.getBlue()*f.getKd()/(bounds+1);//(2*sinTheta*cosTheta);//Operator.subP(intersection, intersect).module();//(bounds+1);
+			double gg = lD2.getGreen()*f.getKd()/(bounds+1);//(2*sinTheta*cosTheta);//Operator.subP(intersection, intersect).module();//(bounds+1);
 			
 			double rFinal = (lD.getRed()+rr)/2;
 			double bFinal = (lD.getBlue()+bb)/2;
 			double gFinal = (lD.getGreen()+gg)/2;
-			lD= new Color((int)rFinal,(int)gFinal,(int)bFinal);
+			
+			lD= limitColor((int)rFinal,(int)gFinal,(int)bFinal);
 		}
 		return lD;
 	}
 
+	public static Color limitColor(int r, int g, int b) {
+		if(r>255) r=255;
+		if (r<0) r=0;
+		if(g>255) g=255;
+		if (g<0) g=0;
+		if(b>255) b=255;
+		if (b<0) b=0;
+		return new Color(r,g,b);
+	}
+	
 	private static Color luzIndirectaEspecular(Point intersect, Point light, List<Figure> figures, 
 			Figure fi, Ray ray, int bounds) {
 		// new specular 
@@ -449,8 +429,7 @@ public class PathTracer {
 		return Math.toRadians(Math.random() * 180);
 	}
 	
-	public static Direction getSample(){
-	    double cosTheta = Math.random();
+	public static Direction getSample(double cosTheta){
 	    double sinTheta = Math.sqrt(1 - cosTheta * cosTheta);
 	    double phi = Math.PI * 2 * Math.random();
 	    return new Direction(sinTheta * Math.cos(phi), cosTheta, sinTheta * Math.sin(phi));
