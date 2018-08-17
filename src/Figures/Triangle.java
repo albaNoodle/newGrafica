@@ -15,8 +15,8 @@ public class Triangle extends Figure {
 	Point p3;
 	Direction n = new Direction(0, 0, 0);
 
-	public Triangle(Point p1, Point p2, Point p3, Direction normal, Color color, double kd, double ks, boolean light) {
-		super(new Point(0, 0, 0), color, kd, ks, normal);
+	public Triangle(Point p1, Point p2, Point p3, Direction normal, Color color, double kd, double ks,double kr, boolean light) {
+		super(new Point(0, 0, 0), color, kd, ks,kr, normal);
 		this.p1 = p1;
 		this.p2 = p2;
 		this.p3 = p3;

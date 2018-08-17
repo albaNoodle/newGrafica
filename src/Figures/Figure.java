@@ -12,8 +12,10 @@ public abstract class Figure {
 	double t;
 	double kd;
 	double ks;
+	double kr; //indice de refraccion
 
 	Direction normal;
+	
 	boolean is_sphere = false;
 	public boolean is_light = false;
 
@@ -25,7 +27,7 @@ public abstract class Figure {
 		this.is_light = is_light;
 	}
 
-	public Figure(Point center, Color color, double kd, double ks, Direction normal) {
+	public Figure(Point center, Color color, double kd, double ks, double kr, Direction normal) {
 		this.center = center;
 		this.color = color;
 		this.kd = kd;
@@ -86,4 +88,11 @@ public abstract class Figure {
 		return -1;
 	}
 
+	public double getKr() {
+		return kr;
+	}
+
+	public void setKr(double kr) {
+		this.kr = kr;
+	}
 }
