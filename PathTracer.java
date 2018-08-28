@@ -459,16 +459,18 @@ public class PathTracer {
 		double s = 9999999;
 		double t = -1;
 		Point intersection = null;
+		Figure fi =null;
 		// Intersect figures
 		for (Figure sf : figures) {
 			t = sf.intersect(r.getO(), r.getD());
 			if (s > t && t > 0) {
 				s = t;
+				fi=sf;
 				intersection = Operator.addD(r.getO(), r.getD().scale(t));
 			}
 		}
 
-		if (intersection == (null)) {
+		if (intersection == (null) || fi.getKr()>0.0) {
 			return false;
 		}
 		
