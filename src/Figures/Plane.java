@@ -10,8 +10,8 @@ public class Plane extends Figure{
 	double d;
 	Direction normal;
 	
-	public Plane(Point o,Direction normal, Color c, double d, double kd, double ks) {
-		super(o,c,kd, ks, normal);
+	public Plane(Point o,Direction normal, Color c, double d, double kd, double ks,double kr) {
+		super(o,c,kd, ks,kr, normal);
 		this.d=d;
 		//this.normal=normal;
 	}
