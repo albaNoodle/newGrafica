@@ -17,21 +17,25 @@ public class PathTracer {
 
 	final static int MAX_REBOTES = 3;
 	public static double profImagen = 10;
-	public static int antialiasing = 3;
+	public static int antialiasing;
 	public static List<Figure> figures = new ArrayList<Figure>();
 	private static Direction Nb;
 	private static Direction Nt;
 	private static int percent = 0;
 	private static int POTENCIA = 80;
+	private static String imageName;
 
 	public static void main(String[] args) {
+		antialiasing = Integer. parseInt(args[0]);
 		// Resolution photo
-		int y = 1080;
-		int x = 1080;
+		int x = Integer. parseInt(args[1]);
+		int y = Integer. parseInt(args[2]);
+		imageName= args[3]+".png";
+		
 
 		// Variables Path
 		BufferedImage bI = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
-		File h = new File("sombraTr3.bmp");
+		File h = new File(imageName);
 
 		// Camera
 		Point centerI = new Point(0, 0, 0);
@@ -58,30 +62,39 @@ public class PathTracer {
 		System.out.printf("%f\n", sx);
 		double sy = (-20.0 * 2) / y;
 
-		// List of figures
-
-		figures.add(new Plane(new Point(0, 1, 0), new Direction(0, -1, 0), Color.MAGENTA, 40, 0.5, 0.0, 0.0)); // arriba
-		figures.add(new Plane(new Point(0, -1, 0), new Direction(0, 1, 0), Color.MAGENTA, 40, 0.5, 0.0, 0.0));// abajo
-		figures.add(new Plane(new Point(0, 0, 1), new Direction(0, 0, -1), Color.WHITE, 90, 0.5, 0, 0.0)); // fondo
-		figures.add(new Plane(new Point(0, 0, 1), new Direction(0, 0, 1), Color.YELLOW, 40, 0.5, 0, 0.0)); //
+		
+		/*
+		 * LISTA DE FIGURAS, CREACIÓN DE LA ESCENA
+		 */
+		figures.add(new Plane(new Point(0, 1, 0), new Direction(0, -1, 0), Color.GRAY, 40, 0.5, 0.0, 0.0)); // arriba
+		figures.add(new Plane(new Point(0, -1, 0), new Direction(0, 1, 0), Color.GRAY, 40, 0.5, 0.0, 0.0));// abajo
+		figures.add(new Plane(new Point(0, 0, 1), new Direction(0, 0, -1), Color.GRAY, 90, 0.5, 0, 0.0)); // fondo
+//		figures.add(new Plane(new Point(0, 0, 1), new Direction(0, 0, 1), Color.YELLOW, 40, 0.5, 0, 0.0)); //
 		figures.add(new Plane(new Point(1, 0, 0), new Direction(-1, 0, 0), Color.RED, 0, 0.5, 0, 0.0)); // izq
 		figures.add(new Plane(new Point(-1, 0, 0), new Direction(1, 0, 0), Color.GREEN, 80, 0.5, 0, 0.0));// drcha
 		// figures.add(new Sphere(new Point(-20, -20, 50), 5, Color.BLUE, 0.8));
-		figures.add(new Sphere(new Point(-70, -20, 50), 5, Color.BLUE, 0.0, 1, 0.0));
-		figures.add(new Sphere(new Point(-15, -5, 50), 10, Color.BLUE, 0.0, 0, 1.3));
+		figures.add(new Sphere(new Point(-60, -25, 60), 13, Color.MAGENTA, 0.1, 0, 0.0));
+		figures.add(new Sphere(new Point(-15, -25, 60), 13, Color.BLUE, 0.9, 0, 0));
 		// figures.add(new Sphere(new Point(-40, -10, 50), 5, Color.RED, 1, 0));
 		// figures.add(new Triangle(new Point(-50, -10, 50),new Point(-30, -10, 40),new
 		// Point(-30, -10, 50),new Direction(1, 1, 1), Color.ORANGE,0.5));
-		figures.add(new Triangle(new Point(-5, -20, 50), new Point(-10, -20, 50), new Point(-7.5, -20, 60),
-				new Direction(0, 1, 0), Color.ORANGE, 0.5, 0.0, 0.0, false));
-		figures.add(new Triangle(new Point(-35, 39.99, 45), new Point(-45, 39.99, 55), new Point(-45, 39.99, 45),
-				new Direction(0, 1, 0), Color.WHITE, 0.5, 0.0, 0.0, true));
-		figures.add(new Triangle(new Point(-35, 39.99, 55), new Point(-35, 39.99, 45), new Point(-45, 39.99, 55),
-				new Direction(0, 1, 0), Color.WHITE, 0.5, 0.0, 0.0, true));
-		figures.add(new Triangle(new Point(-20, -20, 50), new Point(-30, -20, 50), new Point(-30, -20, 60),
-				new Direction(0, 1, 0), Color.ORANGE, 0.5, 0.0, 0.0, false));
-		figures.add(new Triangle(new Point(-20, -20, 50), new Point(-20, -20, 60), new Point(-30, -20, 60),
-				new Direction(0, 1, 0), Color.ORANGE, 0.5, 0.0, 0.0, false));
+//		figures.add(new Triangle(new Point(-5, -20, 50), new Point(-10, -20, 50), new Point(-7.5, -20, 60),
+//				new Direction(0, 1, 0), Color.ORANGE, 0.5, 0.0, 0.0, false));
+		Triangle TLight1 = new Triangle(new Point(-35, 39.99, 45), new Point(-45, 39.99, 55), new Point(-45, 39.99, 45),
+				new Direction(0, 1, 0), Color.WHITE, 0.5, 0.0, 0.0, true);
+		figures.add(TLight1);
+		TLight1.setIs_light(true);
+		Triangle TLight2 = new Triangle(new Point(-35, 39.99, 55), new Point(-35, 39.99, 45), new Point(-45, 39.99, 55),
+				new Direction(0, 1, 0), Color.WHITE, 0.5, 0.0, 0.0, true);
+		figures.add(TLight2);
+		TLight2.setIs_light(true);
+		ArrayList<Triangle> TLights = new ArrayList<>();
+		TLights.add(TLight1);
+		TLights.add(TLight2);
+//		figures.add(new Triangle(new Point(-20, -20, 50), new Point(-30, -20, 50), new Point(-30, -20, 60),
+//				new Direction(0, 1, 0), Color.ORANGE, 0.5, 0.0, 0.0, false));
+//		figures.add(new Triangle(new Point(-20, -20, 50), new Point(-20, -20, 60), new Point(-30, -20, 60),
+//				new Direction(0, 1, 0), Color.ORANGE, 0.5, 0.0, 0.0, false));
 		// figures.add(new Triangle(new Point(-60, 10, 40),new Point(-60, 10, 50),new
 		// Point(-50, 10, 40),new Direction(1, 1, 1), Color.ORANGE,0.5));
 		// figures.add(new Sphere(new Point(0, -20, 50), 5, Color.BLUE, 0.8));
@@ -92,7 +105,7 @@ public class PathTracer {
 			for (int px = 0; px < x; px++) {
 				// System.out.println(p+" "+ sx +" "+ px +" "+ sy +" "+ py +" "+ cbm + " "+
 				// camera.getC());
-				finalColor = render(p, 0, px, 0, py, cbm, camera.getC());
+				finalColor = render(p, 0, px, 0, py, cbm, camera.getC(),TLights);
 				// Point light= new Point (0,0,0);
 				bI.setRGB(px, py, finalColor.getRGB());
 				p.setX(p.getX() + sx);
@@ -102,7 +115,7 @@ public class PathTracer {
 			p.setX(-20);
 		}
 		try {
-			ImageIO.write(bI, "bmp", h);
+			ImageIO.write(bI, "png", h);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -130,7 +143,7 @@ public class PathTracer {
 		}
 	}
 
-	public static Color render(Point p, double sx, double px, double sy, double py, double[][] cbm, Point origin) {
+	public static Color render(Point p, double sx, double px, double sy, double py, double[][] cbm, Point origin, ArrayList<Triangle> TLights) {
 		// Point intersection=null;
 		Random r = new Random();
 		int rA = 0;
@@ -138,14 +151,8 @@ public class PathTracer {
 		int bA = 0;
 		Point pA;
 //		Point light = new Point(-35, 39.98, 45);
-		Triangle lightT1 = new Triangle(new Point(-35, 39.98, 45), new Point(-45, 39.98, 55), new Point(-45, 39.98, 45),
-				new Direction(0, 1, 0), Color.WHITE, 0.5, 0.2, 0.0, true);
-		lightT1.setIs_light(true);
-		Triangle lightT2 = new Triangle(new Point(-35, 39.98, 55), new Point(-35, 39.98, 45), new Point(-45, 39.98, 55),
-				new Direction(0, 1, 0), Color.WHITE, 0.5, 0.2, 0.0, true);
-		lightT2.setIs_light(true);
-		Point light = lightT1.getRnd();
-		Point light2 = lightT2.getRnd();
+		Point light = TLights.get(0).getRnd();
+		Point light2 = TLights.get(1).getRnd();
 		light.setX((light.getX() + light2.getX()) / 2);
 		light.setY((light.getY() + light2.getY()) / 2);
 		light.setZ((light.getZ() + light2.getZ()) / 2);
@@ -175,10 +182,7 @@ public class PathTracer {
 			}
 			// Direct light Blanco si choca en luz
 			Color ld;
-			if (!f.is_light)
-				ld = luzDirecta(intersection, light, figures, f, POTENCIA);
-			else
-				ld = Color.WHITE;
+			
 
 			int mC = RussianRoulette.calculate(f);
 			// MonteCarlo
@@ -191,24 +195,29 @@ public class PathTracer {
 			 * py, cbm, origin); }
 			 */
 			Ray tt = rayPath;
+			if (!f.is_light)
+				ld = luzDirecta(intersection, light, figures, f, POTENCIA);
+			else
+				ld = Color.WHITE;
 			if(f.getKr()>0) {
-				lI = luzIndirectaRefractada(intersection, light, figures, f, tt, 0,1,false);
-				rA = rA + lI.getRed();
-				bA = bA + lI.getBlue();
-				gA = gA +  lI.getGreen();
+				lI = luzIndirectaRefractada(intersection, light, figures, f, tt, 0,1,true);
+//				rA = rA + lI.getRed();
+//				bA = bA + lI.getBlue();
+//				gA = gA +  lI.getGreen();
 			}
-			else {
-			if (mC == 2) {
+//			else {
+				
+			else if (mC == 2) {
 				lI = luzIndirectaEspecular(intersection, light, figures, f, tt, 0);
 			} else if (mC == 1) {
 				lI = luzIndirectaDifusa(intersection, light, figures, f, tt, 0);
-			}
+//			}
 			// end ray
-
+			}
 			rA = rA + (ld.getRed() + lI.getRed()) / 2;
 			bA = bA + (ld.getBlue() + lI.getBlue()) / 2;
 			gA = gA + (ld.getGreen() + lI.getGreen()) / 2;
-			}
+			
 			// PARA PROBAR INDIRECTA SOLO DESCOMENTAR
 //			rA =rA + lI.getRed();
 //			bA =bA +  lI.getBlue();
@@ -279,7 +288,7 @@ public class PathTracer {
 		if (bounds < MAX_REBOTES && !f.is_light && intersection!=null ) {
 			int russianRoulette = RussianRoulette.calculate(f);
 			if(f.getKr()>0) {
-				lD2=luzIndirectaRefractada(intersection, light, figures, f, ray, bounds + 1,1,false);
+				lD2=luzIndirectaRefractada(intersection, light, figures, f, ray, bounds + 1,1,true);
 			}
 			else if (russianRoulette == 1 && !f.is_light) {
 				lD2 = luzIndirectaDifusa(intersection, light, figures, f, ray, bounds + 1);
@@ -353,13 +362,15 @@ public class PathTracer {
 		if (bounds < MAX_REBOTES && !f.is_light && intersection!=null) {
 			int russianRoulette = RussianRoulette.calculate(f);
 			if(f.getKr()>0) {
-				lE2=luzIndirectaRefractada(intersection, light, figures, f, ray, bounds + 1,1,false);
+				lE2=luzIndirectaRefractada(intersection, light, figures, f, ray, bounds + 1,1,true);
 			}
-			if (russianRoulette == 1) {
-				lE2 = luzIndirectaDifusa(intersection, light, figures, f, ray, bounds + 1);
-			}
-			if (russianRoulette == 2) {
-				lE2 = luzIndirectaEspecular(intersection, light, figures, f, ray, bounds + 1);
+			else{
+				if (russianRoulette == 1) {
+					lE2 = luzIndirectaDifusa(intersection, light, figures, f, ray, bounds + 1);
+				}
+				if (russianRoulette == 2) {
+					lE2 = luzIndirectaEspecular(intersection, light, figures, f, ray, bounds + 1);
+				}
 			}
 			lE = new Color(((lE2.getRed() + lE.getRed()) / 2), ((lE2.getGreen() + lE.getGreen()) / 2),
 					((lE2.getBlue() + lE.getBlue()) / 2));
@@ -374,47 +385,56 @@ public class PathTracer {
 		double indexNext;
 		
 		if (isInside) {
-			indexNext = 1.0;// / fi.getKr();
+			indexNext = 1.0;/// fi.getKr();
 		}
 		else {
 			indexNext = fi.getKr();
 		}
 		double n = indexRefraction / indexNext;
-		double cosT2 = 1.0 - n*n* (1.0 - cosI*cosI);
-		
-		if(cosT2>=0){
+		double cosT2 = Math.sqrt(1.0 - indexNext*indexNext* (1.0 - cosI*cosI));
+		Direction T;
+		if(cosT2<=0){
 			//VecF T = n * (ray.getDirection() + N * cosI) - N * sqrtf( cosT2 );
-			Direction T = Operator.subD(
-					Operator.addD(ray.getD(), fi.getNormal(intersect).scale(cosI)).scale(n),
-					fi.getNormal(intersect).scale(Math.sqrt(cosT2)));
+//			Direction T = Operator.subD(
+//			Operator.addD(ray.getD(), fi.getNormal(intersect).scale(cosI)).scale(n),
+//			fi.getNormal(intersect).scale(Math.sqrt(cosT2)));
+//			Vector wt = Operaciones.restaVmenosV(Operaciones.multVporEscalar(nor, nint*cos-cost),
+//					Operaciones.multVporEscalar(dir, nint));
+			T = Operator.subD(fi.getNormal(intersect).scale(indexNext*cosI-cosT2),
+					ray.getD().scale(indexNext));
+		}else {
+			T=Operator.subD(ray.getD().scale(n),
+					fi.getNormal(intersect).scale(n*cosI-cosT2)
+					);
+		}
 					//Operator.subD(f.getNormal(intersect).scale(n*cosI-cosT2),Ti.scale(n));
-			Ray rayR = new Ray(Operator.addD(intersect,T.scale(0.0001)), T);
+			Ray rayR = new Ray(Operator.addD(intersect,T.scale(0.0000001)), T);
 			Figure f = null;
 			double s = 9999999;
 			double t = -1;
 			Point intersection = null;
 
 			for (Figure sf : figures) {
-				t = sf.intersect(Operator.addD(intersect,T.scale(0.0001)), rayR.getD());
+				t = sf.intersect(Operator.addD(intersect,rayR.getD().scale(0.0001)), rayR.getD());
 				if (s > t && t > 0) {
 					s = t;
 					f = sf;
-					// //direct light
+					// direct light
 					intersection = Operator.addD(intersect, rayR.getD().scale(t - 0.000001));
-					// // Light of direct Light
+					// Light of direct Light
 				}
 			}
 			Color lR = luzDirecta(intersection, light, figures, f, POTENCIA);
 			Color lR2 = new Color(0);
-			if(isInside && f!=null) {
-				lR2=luzIndirectaRefractada(intersection, light, figures, f, rayR, bounds,f.getKr(), false);
-			}
+//			if(isInside && f!=null) {
+//				lR2=luzIndirectaRefractada(intersection, light, figures, f, rayR, bounds,1, false);
+//			}
 		/******************************/
-			else if(f!=null) {
-				if (bounds < MAX_REBOTES && !f.is_light && !isInside && intersection!=null) {
+			if(f!=null) {
+				if (bounds < MAX_REBOTES && !f.is_light && intersection!=null) {
 					int russianRoulette = RussianRoulette.calculate(f);
 					if(f.getKr()>0) {
-						lR2=luzIndirectaRefractada(intersection, light, figures, f, ray, bounds + 1,1, true);
+						lR2=luzIndirectaRefractada(intersection, light, figures, f, ray, bounds + 1,f.getKr(), false);
 					}
 					if (russianRoulette == 1) {
 						lR2 = luzIndirectaDifusa(intersection, light, figures, f, ray, bounds + 1);
@@ -424,13 +444,11 @@ public class PathTracer {
 					}
 				}
 			}
-			lR = new Color(
-					((lR2.getRed() + lR.getRed()) /2), 
-					((lR2.getGreen() + lR.getGreen()) /2),
-				(lR2.getBlue() + lR.getBlue())/2);
+			lR = limitColor(
+					((lR2.getRed() + lR.getRed()) ), 
+					((lR2.getGreen() + lR.getGreen()) ),
+				(lR2.getBlue() + lR.getBlue()));
 			return lR;
-		}
-		return Color.WHITE;
 	}
 
 	public static Color luzDirecta(Point intersect, Point light, List<Figure> f, Figure fi, double potencia) {
@@ -506,52 +524,5 @@ public class PathTracer {
 		double sinTheta = Math.sqrt(1 - cosTheta * cosTheta);
 		double phi = Math.PI * 2 * Math.random();
 		return new Direction(sinTheta * Math.cos(phi), cosTheta, sinTheta * Math.sin(phi));
-	}
-	
-	public static Color getRefractedRay(Ray ray, Point intersect, Figure f, boolean isInside, double indexRefraction,
-			Point light, int bounds) {
-		Direction Ti = ray.getD();//.scale(-1);
-		double cosI = Operator.dotProduct(Ti, f.getNormal(intersect).scale(-1));
-		double indexNext;
-		
-		if (isInside) {
-			indexNext = 1.0 / f.getKr();
-		}
-		else {
-			indexNext = f.getKr();
-		}
-		double n = indexRefraction / indexNext;
-		double cosT2 = 1.0 - indexNext*indexNext * (1 - cosI*cosI);
-		
-		if(cosT2>=0){
-			//VecF T = n * (ray.getDirection() + N * cosI) - N * sqrtf( cosT2 );
-			Direction T = Operator.subD(Operator.addD(ray.getD(), f.getNormal(intersect).scale(cosI)),f.getNormal(intersect).scale(Math.sqrt(cosT2))).scale(n);
-					//Operator.subD(f.getNormal(intersect).scale(n*cosI-cosT2),Ti.scale(n));
-			Ray rayR = new Ray(Operator.addD(intersect,T.scale(0.0001)), T);
-			Figure fi = null;
-			double s = 9999999;
-			double t = -1;
-			Point intersection = null;
-
-			for (Figure sf : figures) {
-				t = sf.intersect(intersect, rayR.getD());
-				if (s > t && t > 0) {
-					s = t;
-					fi = sf;
-					// //direct light
-					intersection = Operator.addD(intersect, rayR.getD().scale(t - 0.000001));
-					// // Light of direct Light
-					}
-				}
-				Color lR = luzDirecta(intersection, light, figures, fi, POTENCIA);
-				Color lR2 = new Color(0);
-			lR2=luzIndirectaRefractada(intersection, light, figures, fi, rayR, bounds,1, false);
-			return lR2;
-		}
-		else{
-//			double i = Operator.dotProduct(ray.getD(), f.getNormal(intersect));
-//			ray.setD(Operator.subD(ray.getD(), f.getNormal(intersect).scale(2 * i)));
-			return Color.black;
-		}
 	}
 }
