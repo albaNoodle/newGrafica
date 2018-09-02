@@ -32,6 +32,7 @@ public abstract class Figure {
 		this.color = color;
 		this.kd = kd;
 		this.ks = ks;
+		this.kr=kr;
 		this.normal = normal;
 		normal.normalize();
 	}

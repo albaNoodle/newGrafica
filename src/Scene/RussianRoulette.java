@@ -16,12 +16,16 @@ public class RussianRoulette {
 		if (0<=t && t<f.getKd()) { //Difusa
 			return 1; 
 		}
-		else if ((f.getKd()+f.getKs())<t) { //Muerte
-			return 0;
-		}
-		else { //kd < t < kd + ks  //especular
+		else if((f.getKd()+f.getKs())>t){ //kd < t < kd + ks  //especular
 			return 2;
 		}
+//		else if((f.getKd()+f.getKs()+f.getKr())>t){ //kd < t < kd + ks  //especular
+//			return 3;
+//		}
+		else { //Muerte
+			return 0;
+		}
+
 	}
 
 }

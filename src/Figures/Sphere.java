@@ -21,15 +21,10 @@ public class Sphere extends Figure{
 	}
 	
 	public Direction getNormal(Point p) {
-		//System.out.println("WOOOOOOO");
 		Direction d=Operator.subP(p,getCenter());
 		d.normalize();
 		return d;
 	} 
-	
-//	public Point getCenter() {
-//		return center;
-//	}
 
 	public void setCenter(Point center) {
 		this.center = center;
@@ -49,15 +44,6 @@ public class Sphere extends Figure{
 		double c=center.getX()*center.getX()+center.getY()*center.getY()+center.getZ()*center.getZ()+
 				O.getX()*O.getX()+O.getY()*O.getY()+O.getZ()*O.getZ()
 				-2*(center.getX()*O.getX()+center.getY()*O.getY()+center.getZ()*O.getZ())-radio*radio;
-		//System.out.println("jijijiji");
-//		d.normalize();
-//		Point p=Operator.addD(O, d);
-//		d=Operator.subP(p, O);
-//		d.normalize();
-//		double a= Operator.dotProduct(d, d);
-//		double b=Operator.dotProduct(d, Operator.subP(O, center))*2;
-//		double c=Operator.dotProduct(center, center)+Operator.dotProduct(O, O)
-//			-radio*radio-2*Operator.dotProduct(O, center);
 		double det= b*b-4*a*c;
 		double t=-1.0;
 		if (det<0) {
@@ -82,35 +68,8 @@ public class Sphere extends Figure{
 				t= tmenos;
 			}
 		}
-		//System.out.println("jijijiji" + t);
 		return t;
-		
-//		// Interseccion esfera
-//		t = (-(2 * Operator.dotProduct(d, center)) + Math.sqrt((2 * Operator.dotProduct(d, center)) * (2 * Operator.dotProduct(d, center))
-//				- 4 * (Operator.dotProduct(d, d)) * (Operator.dotProduct(center, center) - radio * radio)))
-//				/ (2 * (Operator.dotProduct(d, d)));
-//
-//		if ((t > (-(2 * Operator.dotProduct(d, center))
-//				- Math.sqrt((2 * Operator.dotProduct(d, center)) * (2 * Operator.dotProduct(d, center))
-//						- 4 * (Operator.dotProduct(d, d)) * (Operator.dotProduct(center, center) - radio * radio)))
-//				/ (2 * (Operator.dotProduct(d, d))))
-//				&& (-(2 * Operator.dotProduct(d, center))
-//						- Math.sqrt((2 * Operator.dotProduct(d, center)) * (2 * Operator.dotProduct(d, center))
-//								- 4 * (Operator.dotProduct(d, d)) * (Operator.dotProduct(center, center) - radio * radio)))
-//						/ (2 * (Operator.dotProduct(d, d))) > 0) {
-//			t = (-(2 * Operator.dotProduct(d, center))
-//					- Math.sqrt((2 * Operator.dotProduct(d, center)) * (2 * Operator.dotProduct(d, center))
-//							- 4 * (Operator.dotProduct(d, d)) * (Operator.dotProduct(center, center) - radio * radio)))
-//					/ (2 * (Operator.dotProduct(d, d)));
-//		}
-//
-//	//	System.out.println((2 * d.dotProduct(d, center)) * (2 * d.dotProduct(d, center))
-//	//			- 4 * (d.dotProduct(d, d)) * (d.dotProduct(center, center)));
-//		if (t > 0) {
-//			return t;
-//		}
-//		return -1;
-//	}
 	}
 }
+
 
