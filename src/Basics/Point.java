@@ -15,6 +15,11 @@ public class Point {
 	public Direction scale(double k) {
 		return new Direction(x*k,y*k,z*k);
 	}
+	
+	public Point scaleP(double k) {
+		return new Point(x*k,y*k,z*k);
+	}
+	
 	public double getX() {
 		return x;
 	}

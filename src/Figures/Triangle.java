@@ -79,25 +79,29 @@ public class Triangle extends Figure {
 	} 
 	
 	public Point getRnd() {
-		/*	Random r=new Random();
-			double rand1=r.nextDouble();
-			double rand2=r.nextDouble();
-			Direction d1= Geometry.subD(p2, p1);
-			d1=d1.scale(rand1);
-			Direction d2= Geometry.subD(p3, p1);
-			d2=d2.scale(rand2);
-			d1=Geometry.addD(d1, d2);
-			d1.scale(0.5);
-			return Geometry.addP(p1,d1);
-		*/Random r=new Random();
-			double rand1=r.nextDouble();
-			double rand2=rand1*r.nextDouble();
-			Direction d1= Operator.subP(p2, p1);
-			d1=d1.scale(rand1);
-			Direction d2= Operator.subP(p3, p1);
-			d2=d2.scale(rand2);
-			d1=Operator.addD(d1, d2);
-			return Operator.addD(p1,d1);
+		/*
+		 * P(x) = (1 - sqrt(r1)) * A(x) + (sqrt(r1) * (1 - r2)) * B(x) + (sqrt(r1) * r2) * C(x)
+P(y) = (1 - sqrt(r1)) * A(y) + (sqrt(r1) * (1 - r2)) * B(y) + (sqrt(r1) * r2) * C(y)
+		 */
 		
+		
+			double rand1=Math.random();
+			double rand2=Math.random();
+			double a1 = 1 - Math.sqrt(rand1);
+			Point r1 = p1.scaleP(a1);
+			double b1 = Math.sqrt(rand1)*(1-rand2);
+			Point r2  = p2.scaleP(b1);
+			double c1 = rand2*Math.sqrt(rand1);
+			Point r3 = p3.scaleP(c1);
+			Point rp = Operator.addP(r1, r2);
+			rp = Operator.addP(rp, r3);
+			double x = (1 - Math.sqrt(rand1)) * p1.getX() + 
+					(Math.sqrt(rand1) * (1 - rand2)) * p2.getX() + 
+					(Math.sqrt(rand1) * rand2) * p3.getX();
+			double z = (1 - Math.sqrt(rand1)) * p1.getZ() + 
+					(Math.sqrt(rand1) * (1 - rand2)) * p2.getZ() + 
+					(Math.sqrt(rand1) * rand2) * p3.getZ();
+			rp = new Point(x,p1.getY(),z);
+			return rp;
 			}
 }

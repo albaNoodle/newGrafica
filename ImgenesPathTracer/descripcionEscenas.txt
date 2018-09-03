@@ -1,0 +1,21 @@
+scene1: 2 puntos luz alejados, 100al, Solo directa, esfera azul 0.1 kd y esfera magenta 0.9 kd
+
+scene2: 2 puntos luz alejados, 100al, Solo directa, esfera azul 0.9 kd y esfera magenta 0.1 kd
+
+scene3: 2 puntos luz cercanos, 100al, Solo directa, esfera azul 0.9 kd y esfera magenta 0.1 kd
+
+scene4: 4 puntos luz alejados, 100al, Solo directa, esfera azul 0.1 kd y esfera magenta 0.9 kd
+
+scene4a: 4 puntos luz alejados, 150al, Solo directa, esfera azul 0.1 kd y esfera magenta 0.3 kd + indirecta
+
+scene5: rr y ld dividido para 2 + rr gg bb / 2cosThetasinTheta
+
+scene6: indirecta + directa esferas difusas
+
+scene7: indirecta esferas
+
+scene8: reflexion
+
+scene9: refraccion
+
+secene10: reflexion + refracción??
