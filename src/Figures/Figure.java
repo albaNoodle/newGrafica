@@ -65,8 +65,8 @@ public abstract class Figure {
 		return is_sphere;
 	}
 
-	public boolean is_sphereT() {
-		return is_sphere = true;
+	public void is_sphereT() {
+		is_sphere = true;
 	}
 
 	public void setColor(Color color) {

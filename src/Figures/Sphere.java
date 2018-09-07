@@ -12,7 +12,6 @@ public class Sphere extends Figure{
 	public Sphere (Point center, double radio, Color color,double kd, double ks, double kr) {
 		super(center,color,kd,ks,kr,new Direction(0,0,0));
 		is_sphereT();
-		System.out.println(is_sphere());
 		this.radio=radio;
 	}
 	
@@ -21,7 +20,7 @@ public class Sphere extends Figure{
 	}
 	
 	public Direction getNormal(Point p) {
-		Direction d=Operator.subP(p,getCenter());
+		Direction d=Operator.subP(getCenter(),p);
 		d.normalize();
 		return d;
 	} 
