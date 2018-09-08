@@ -20,7 +20,7 @@ public class Sphere extends Figure{
 	}
 	
 	public Direction getNormal(Point p) {
-		Direction d=Operator.subP(getCenter(),p);
+		Direction d=Operator.subP(getCenter(), p);
 		d.normalize();
 		return d;
 	} 

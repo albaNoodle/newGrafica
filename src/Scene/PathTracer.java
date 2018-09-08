@@ -69,8 +69,8 @@ public class PathTracer {
 		figures.add(new Plane(new Point(1, 0, 0), new Direction(-1, 0, 0), Color.RED, 0, 0.3, 0, 0.0)); // izq
 		figures.add(new Plane(new Point(-1, 0, 0), new Direction(1, 0, 0), Color.GREEN, 80, 0.3, 0, 0.0));// drcha
 		// figures.add(new Sphere(new Point(-20, -20, 50), 5, Color.BLUE, 0.8));
-		figures.add(new Sphere(new Point(-60, 0, 60), 13, Color.MAGENTA, 0.9, 0.5, 0.0));
-		figures.add(new Sphere(new Point(-15, 0, 60), 13, Color.BLUE, 0.3, 0.9, 0));
+		figures.add(new Sphere(new Point(-65, -25, 70), 13, Color.MAGENTA, 0.0, 0.0, 1.2));
+		figures.add(new Sphere(new Point(-15, -25, 60), 13, Color.BLUE, 0.0, 1, 0));
 //		figures.add(new Sphere(new Point(-40, 0, 60), 13, Color.YELLOW, 0.2, 0.1, 0));
 		// figures.add(new Triangle(new Point(-50, -10, 50),new Point(-30, -10, 40),new
 		// Point(-30, -10, 50),new Direction(1, 1, 1), Color.ORANGE,0.5));
@@ -88,7 +88,7 @@ public class PathTracer {
 		TLights.add(TLight1);
 		TLights.add(TLight2);
 		ArrayList<Point> lightPoints= new ArrayList<>(); 
-		Point light1 = new Point(-41, -30, 30);
+		Point light1 = new Point(-41, 39.99, 50);
 //		Point light1 = new Point(-70, 39.99, 45);
 		lightPoints.add(light1);
 		Point light2 = new Point(-40, 39.99, 52);
@@ -211,14 +211,14 @@ public class PathTracer {
 					lI = luzIndirectaDifusa(intersection, lightPoints.get(i), figures, f, tt, 0);
 				}
 				//SOLO LUZ DIRECTA
-				rA = rA + (ld.getRed()/lightPoints.size());
-				bA = bA + (ld.getBlue()/lightPoints.size());
-				gA = gA + (ld.getGreen()/lightPoints.size());
+//				rA = rA + (ld.getRed()/lightPoints.size());
+//				bA = bA + (ld.getBlue()/lightPoints.size());
+//				gA = gA + (ld.getGreen()/lightPoints.size());
 				
-				//LUZ INDIRECTA + DIRECTA
-//				rA = rA + ((ld.getRed() + lI.getRed()) / 2)/lightPoints.size();
-//				bA = bA + ((ld.getBlue() + lI.getBlue()) / 2)/lightPoints.size();
-//				gA = gA + ((ld.getGreen() + lI.getGreen()) / 2)/lightPoints.size();
+//				//LUZ INDIRECTA + DIRECTA
+				rA = rA + ((ld.getRed() + lI.getRed()) / 2)/lightPoints.size();
+				bA = bA + ((ld.getBlue() + lI.getBlue()) / 2)/lightPoints.size();
+				gA = gA + ((ld.getGreen() + lI.getGreen()) / 2)/lightPoints.size();
 				
 				//LUZ INDIRECTA
 //				rA =rA + lI.getRed()/lightPoints.size();
